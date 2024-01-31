@@ -77,7 +77,7 @@ pipeline {
                 script {
                     sh 'docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}'
                     sh 'docker rm galaxyLab -f'
-                    sh 'docker run -d -p 8050:8080 --name galaxyLab ${DOCKER_CREDS_USR}/msmicroservice:$BUILD_NUMBER'
+                    sh 'docker run -d -p 8090:8080 --name galaxyLab ${DOCKER_CREDS_USR}/msmicroservice:$BUILD_NUMBER'
                     sh 'docker logout'
                 }
             }
