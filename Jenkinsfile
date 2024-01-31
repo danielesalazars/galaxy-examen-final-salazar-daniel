@@ -44,14 +44,13 @@ pipeline {
                             -Dsonar.java.coveragePlugin=jacoco \
                             -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco.xml \
                             -Dsonar.exclusions=**/*IT.java,**/*TEST.java,**/*Test.java,**/src/it**,**/src/test**,**/gradle/wrapper** \
-                            -Dsonar.java.libraries=target/*.jar"
                     }
                 }
             }
         }
         stage('Build Docker Image') {
             steps {
-                copyArtifacts filter: 'target/*.jar',
+                copyArtifacts filter: 'target/labmaven-*.jar',
                             fingerprintArtifacts: true,
                             projectName: '${JOB_NAME}',
                             flatten: true,
