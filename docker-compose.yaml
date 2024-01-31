@@ -6,4 +6,4 @@ services:
       context: .
       dockerfile: ./src/main/docker/Dockerfile
     ports:
-      - 8090:8080
+      - 8050:8080
