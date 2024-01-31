@@ -1,0 +1,19 @@
+try {
+    node {
+        stage('Snyk Scan') {
+            tools {
+                maven '3.8.7'
+            }
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                checkout scm
+                snykSecurity organisation: 'josealdotrucios', projectName: '${JOB_NAME}', 
+                             severity: 'high', snykInstallation: 'snyk@latest', 
+                             snykTokenId: 'organisation-snyk-api-token', targetFile: 'pom.xml'
+            }
+        }
+    }
+} catch (Exception e) {
+    node {
+        throw e
+    }
+}

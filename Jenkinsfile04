@@ -1,0 +1,28 @@
+pipeline {
+    agent {
+        docker {
+            image 'google/cloud-sdk:slim'
+        }
+    }
+    environment {
+        CLOUDSDK_CORE_PROJECT='arcane-grin-403922'
+        GCLOUD_CREDS=credentials('gcloud-credentials')
+    }
+    stages {
+        stage('gcloud login'){
+            steps {
+                sh '''
+                    gcloud version
+                    gcloud config set project arcane-grin-403922
+                    gcloud auth activate-service-account --key-file="$GCLOUD_CREDS"
+                    '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'gcloud app deploy'
+            }
+        }
+    }
+}

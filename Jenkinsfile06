@@ -1,0 +1,30 @@
+pipeline {
+
+    agent {
+        docker { image 'maven:3.6.3-openjdk-11-slim' }
+    }
+
+    stages {
+        stage('Snyk'){
+            steps {
+                script {
+                    snykSecurity failOnError: false, failOnIssues: false, organisation: 'josealdotrucios', projectName: '${JOB_NAME}', 
+                     severity: 'high', snykInstallation: 'snyk@latest', 
+                     snykTokenId: 'organisation-snyk-api-token', targetFile: 'pom.xml'
+                }
+            }
+        }
+        stage('Build') {   
+            steps {
+                sh 'mvn -B verify'
+            }
+
+            post{
+                success {
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true, onlyIfSuccessful: true
+                }
+            }
+        }
+
+    }
+}

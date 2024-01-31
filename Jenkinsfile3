@@ -1,0 +1,32 @@
+pipeline {
+    agent {
+        docker {
+            image 'google/cloud-sdk:slim'
+        }
+    }
+    environment {
+        CLOUDSDK_CORE_PROJECT='canvas-landing-397000'
+//        CLIENT_EMAIL='jenkins@insights-api-localdev.iam.gserviceaccount.com'
+        GCLOUD_CREDS=credentials('gcloud-creds')
+        }
+    stages {
+        stage('gcloud login') {
+            steps {
+                sh 'gcloud version'
+            }
+        }
+
+        stage('gcloud Autentication') {
+            steps {
+                sh 'gcloud config set project canvas-landing-397000'
+                sh 'gcloud auth activate-service-account --key-file="$GCLOUD_CREDS"'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'gcloud app deploy'
+            }
+        }
+    }
+}
